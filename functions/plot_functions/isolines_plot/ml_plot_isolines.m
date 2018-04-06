@@ -44,7 +44,7 @@ b_plot_colorbar     = false;
 b_plot_eigenvalues  = false;
 b_plot_surf         = false;
 
-if isfield(plot_options,'labels'),              labels              = plot_options.labels;              end
+if isfield(plot_options,'labels'),              labels              = plot_options.labels;  end
 if isfield(plot_options,'b_plot_data'),         b_plot_data         = plot_options.b_plot_data;         end
 if isfield(plot_options,'b_plot_colorbar'),     b_plot_colorbar     = plot_options.b_plot_colorbar;     end
 if isfield(plot_options,'b_plot_eigenvalues'),  b_plot_eigenvalues  = plot_options.b_plot_eigenvalues;  end
@@ -78,6 +78,10 @@ end
 %% Create label colors if the data is labeled
 
 if ~isempty(labels)
+    % assigns label values to [1:n] so hsv color matrix can be accesed when
+    % plotting. Allows having strings as labels, not starting in 1,    % etc.
+    [~,~, Lnew] = unique(labels(:));
+    lab_escaled = reshape(Lnew,size(labels));
     colors = hsv(length(unique(labels)));
 end
 
@@ -105,7 +109,7 @@ if num_eigs == 1
         if isempty(labels)
             scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,'filled','MarkerFaceColor',[1 0 0],'MarkerEdgeColor',[0 0 0]);
         else
-           hs = scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,colors(labels,:),'filled','MarkerEdgeColor',[0 0 0]);
+           hs = scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,colors(lab_escaled,:),'filled','MarkerEdgeColor',[0 0 0]);
         end            
     end
     
@@ -151,7 +155,7 @@ else
             if isempty(labels)
                 scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,'filled','MarkerFaceColor',[1 0 0],'MarkerEdgeColor',[0 0 0]);
             else
-                scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,colors(labels,:),'filled','MarkerEdgeColor',[0 0 0]);
+                scatter(kernel_data.xtrain(:,xtrain_dim(1)),kernel_data.xtrain(:,xtrain_dim(2)),20,colors(lab_escaled,:),'filled','MarkerEdgeColor',[0 0 0]);
             end            
         end
         
